@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 
-const Student = mongoose.Schema({
+const User = mongoose.Schema({
     firstName:{
         type:String,
         required:true
@@ -23,6 +23,9 @@ const Student = mongoose.Schema({
         type:String,
         required:true
     },
+    image:{
+        type:String,
+    },
     batch:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Batch"
@@ -30,8 +33,13 @@ const Student = mongoose.Schema({
     courses:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Course"
-    }]
+    }],
 
+    role:{
+        type: String,
+        enum:['Admin','User'],
+        default:'User',
+    }
     
 
 })
@@ -39,4 +47,4 @@ const Student = mongoose.Schema({
 
 
 
-module.exports = mongoose.model("Student",Student)
+module.exports = mongoose.model("User",User)

@@ -1,9 +1,10 @@
+require('dotnet').config()
 const express = require("express")
 const userRoute = require("./routes/user-routes")
 const batchRoute = require("./routes/batch-routes")
 const courseRoute = require("./routes/course-routes")
 const mongoose = require("mongoose")
-
+const auth = require("./middleware/auth")
 const app = express()
 const port = 3001
 
@@ -27,5 +28,13 @@ app.listen(port,()=>{
 
 
 app.use("/student",userRoute)
-app.use("/batch",batchRoute)
-app.use("/course",courseRoute)
+app.use("/batch",auth.verifyAdmin,batchRoute)
+app.use("/course",auth.verifyAdmin,courseRoute)
+
+
+app.use((err,req,res,next)=>{
+    if(res.statusCode == 200) res.status(500)
+console.log(err)
+res.status(500).json({"msg":err.messge})
+})
+    
